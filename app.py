@@ -99,7 +99,49 @@ try:
     
     # display the chart
     st.altair_chart(chart_2, use_container_width =True) 
-        
+    
+    # months
+    # st.write(df.columns)
+    
+    st.write("### Monthly Sales Trend")
+    
+    temp_3 = df.groupby("Month_name")["money"].sum().reset_index().sort_values(by= "money", ascending = False)
+    
+    st.dataframe(temp_3)
+    
+    # monthly plot
+    chart_3 = alt.Chart(temp_3).mark_bar().encode(
+        x=alt.X("Month_name:N"),
+        y=alt.Y("money:Q"),
+        color = alt.Color("money:Q")
+    ).properties(height=250)
+    
+    # display the chart
+    st.altair_chart(chart_3) 
+    
+    # date plot    
+    chart_4 = alt.Chart(df).mark_line(point = True).encode(
+        x=alt.X("date:T"),
+        y=alt.Y("money:Q"),
+        color = alt.Color("coffee_name:N")
+    ).properties(height=250)
+    
+    # display the chart
+    st.altair_chart(chart_4) 
+    
+    st.subheader("Average revenue per coffee sold")
+    
+    temp_5 = df.groupby("coffee_name")["money"].sum().reset_index().sort_values(by="money", ascending=True)
+    st.dataframe(temp_5)
+    
+    chart_5 = alt.Chart(temp_5).mark_line(point = True).encode(
+        x=alt.X("coffee_name"),
+        y=alt.Y("money"),
+    ).properties(height=250)
+    
+    # display the chart
+    st.altair_chart(chart_5) 
+    
 except Exception as e:
     st.error("Error: check error details")
     
